@@ -6,10 +6,8 @@ var canvas = (function() {
     mapCtx = map.getContext('2d'),
     scale = 3,
     cWidth = 256 * scale,
-    cHeight = 208 * scale;
-
-//  var scene = 0;
-    var scene = true;
+    cHeight = 208 * scale,
+    scene = true;
 
   //Starting Canvas
   function canvasInit() {

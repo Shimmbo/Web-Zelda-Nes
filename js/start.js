@@ -18,6 +18,7 @@ window.onload = function() {
       canvas._canvasInit.render();
       item._weaponState.render();
       player._playerState.render();
+      inventoryF._inventoryState.render();
     }
   }
 
@@ -49,7 +50,7 @@ function checkMove(px, py, pw, ph, ps, pd, entity, shift) {
     for(var x=0; x < map[y].length; x+=1) {
 
       var tileX = x * maps.tileSize,
-        tileY = y * maps.tileSize + item.inventory.size;
+        tileY = y * maps.tileSize + inventoryF.inventory.size;
 
       if (map[y][x] >= 1) {
         if (px < tileX+maps.tileSize && px + pw > tileX && py < tileY+maps.tileSize && py + ph > tileY) {
