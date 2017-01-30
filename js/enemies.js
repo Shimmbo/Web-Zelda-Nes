@@ -1,17 +1,18 @@
 var enemy = (function(){
+  "use strict";
 
   var tileSize = maps.tileSize;
 
-  function enemyState() {
+  var enemyState = function() {
 
     this.update = function() {
-    }
+    };
     this.render = function() {
-    }
+    };
 
-  }
+  };
 
   return {
-  }
+  };
 
 })();

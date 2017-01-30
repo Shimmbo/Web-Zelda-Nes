@@ -1,4 +1,5 @@
 var sprite = (function() {
+  "use strict";
 
   var size = 16;
 
@@ -15,6 +16,6 @@ var sprite = (function() {
     tiles: tiles,
     chr: chr,
     size: size
-  }
+  };
 
 })();

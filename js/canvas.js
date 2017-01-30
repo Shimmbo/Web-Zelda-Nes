@@ -1,4 +1,5 @@
 var canvas = (function() {
+  "use strict";
 
   var game = document.getElementById('game-canvas'),
     gameCtx = game.getContext('2d'),
@@ -10,7 +11,7 @@ var canvas = (function() {
     scene = true;
 
   //Starting Canvas
-  function canvasInit() {
+  var canvasInit = function() {
     game.width = cWidth;
     game.height = cHeight;
     map.width = cWidth;
@@ -19,15 +20,15 @@ var canvas = (function() {
     this.render = function() {
       gameCtx.clearRect(0, 0, cWidth, cHeight);
     };
-  }
+  };
 
   return {
     scene: scene,
     gameCtx: gameCtx,
     mapCtx: mapCtx,
     scale: scale,
-    cWidth: cWidth,
-    cHeight: cHeight,
+    width: cWidth,
+    height: cHeight,
     _canvasInit: new canvasInit()
   };
 

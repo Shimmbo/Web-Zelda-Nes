@@ -1,19 +1,28 @@
 var inventoryF = (function(){
+  "use strict";
+
+  var weapons = item.weapons,
+    scale = canvas.scale,
+    gameCtx = canvas.gameCtx,
+    cWidth = canvas.width,
+    cHeight = canvas.height,
+    chr = sprite.chr,
+    tileSize = maps.tileSize;
 
   var inventory = {
-    size: 32 * canvas.scale,
+    size: 32 * scale,
     slotA: 0,
     slotB: 0,
     storage: {
-      0:item.weapons.sword.V1,
-      1:item.weapons.bomb.V1,
-      2:item.weapons.sword.V2,
-      3:item.weapons.sword.V3,
-      4:item.weapons.candle.V1,
-      5:item.weapons.bow.V2,
-      6:item.weapons.bow.V3,
-      7:item.weapons.candle.V2,
-      8:item.weapons.bow.V1,
+      0:weapons.sword.V1,
+      1:weapons.bomb.V1,
+      2:weapons.sword.V2,
+      3:weapons.sword.V3,
+      4:weapons.candle.V1,
+      5:weapons.bow.V2,
+      6:weapons.bow.V3,
+      7:weapons.candle.V2,
+      8:weapons.bow.V1,
       9:0,
       10:0,
       11:0,
@@ -32,17 +41,17 @@ var inventoryF = (function(){
     bombs: 6
   };
 
-  function inventoryState() {
+  var inventoryState = function() {
     this.opened = false;
-    this.lineWidth = 2 * canvas.scale;
-    this.redText = 14 * canvas.scale + "px Courier";
+    this.lineWidth = 2 * scale;
+    this.redText = 14 * scale + "px Courier";
     this.cursorX = 13;
     this.cursorY = 80;
     this.storageSlot = 0;
 
     this.update = function() {
 
-    }
+    };
 
     this.render = function() {
 
@@ -51,12 +60,11 @@ var inventoryF = (function(){
       if(this.opened === true) {
         inventoryFull.bind(this)();
       }
-    }
-  }
+    };
+  };
 
-  function inventoryFull() {
+  var inventoryFull = function() {
 
-    /*MAIN INVENTORY DRAWING && SOME FUNCTIONALITY*/
     var itemX = 0,
       itemY = 34;
 
@@ -74,125 +82,131 @@ var inventoryF = (function(){
       this.storageSlot -= 4;
     }
 
-    canvas.gameCtx.fillStyle = "#111";
-    canvas.gameCtx.fillRect(0,inventory.size,canvas.cWidth,canvas.cHeight-inventory.size);
+    gameCtx.fillStyle = "#111";
+    gameCtx.fillRect(0,inventory.size,cWidth,cHeight-inventory.size);
     //navigation cursor
-    canvas.gameCtx.beginPath();
-    canvas.gameCtx.strokeStyle = "#F77";
-    canvas.gameCtx.moveTo(this.cursorX * canvas.scale, this.cursorY * canvas.scale);
-    canvas.gameCtx.lineTo((this.cursorX+13) * canvas.scale, this.cursorY * canvas.scale);
-    canvas.gameCtx.fillStyle = "#000";
-    canvas.gameCtx.stroke();
+    gameCtx.beginPath();
+    gameCtx.strokeStyle = "#F77";
+    gameCtx.moveTo(this.cursorX*scale, this.cursorY*scale);
+    gameCtx.lineTo((this.cursorX+13)*scale, this.cursorY*scale);
+    gameCtx.fillStyle = "#000";
+    gameCtx.stroke();
     //inventory red text
-    canvas.gameCtx.font = this.redText;
-    canvas.gameCtx.fillStyle = "#C33";
-    canvas.gameCtx.fillText("Inventory",18 * canvas.scale,50 * canvas.scale);
+    gameCtx.font = this.redText;
+    gameCtx.fillStyle = "#C33";
+    gameCtx.fillText("Inventory",18*scale,50*scale);
     //inventory blue box
-    canvas.gameCtx.beginPath();
-    canvas.gameCtx.strokeStyle = "#33F";
-    canvas.gameCtx.rect(10 * canvas.scale,56 * canvas.scale,94 * canvas.scale,142 * canvas.scale);
-    canvas.gameCtx.stroke();
+    gameCtx.beginPath();
+    gameCtx.strokeStyle = "#33F";
+    gameCtx.rect(10*scale,56*scale,94*scale,142*scale);
+    gameCtx.stroke();
     //inventory items
     for(var i in inventory.storage) {
-      itemX = 25 * (i % 4) + 12;
-      if(i % 4 === 0) {
-        itemY += 28;
+      if(inventory.storage.hasOwnProperty(i)) {
+        itemX = 25 * (i % 4) + 12;
+        if(i % 4 === 0) {
+          itemY += 28;
+        }
+        gameCtx.drawImage(chr, inventory.storage[i].dispX, inventory.storage[i].dispY, 16, 16, itemX*scale, itemY*scale, tileSize, tileSize);
       }
-      canvas.gameCtx.drawImage(sprite.chr, inventory.storage[i].dispX, inventory.storage[i].dispY, 16, 16, itemX * canvas.scale, itemY * canvas.scale, maps.tileSize, maps.tileSize);
     }
     //triforce red text
-    /*canvas.gameCtx.font = this.redText;
-    canvas.gameCtx.fillStyle = "#C33";
-    canvas.gameCtx.fillText("Triforce",150 * canvas.scale,180 * canvas.scale);*/
-  }
+    /*gameCtx.font = this.redText;
+    gameCtx.fillStyle = "#C33";
+    gameCtx.fillText("Triforce",150*scale,180*scale);*/
+  };
 
-  function inventoryTop() {
+  var inventoryTop = function() {
 
     /*INVENTORY TOP DISPLAY*/
-    var miniMapX = 7 * canvas.scale,
-      miniMapY = 4 * canvas.scale,
-      miniMapW = 67 * canvas.scale,
-      miniMapH = 23.5 * canvas.scale,
-      amtIconSize = maps.tileSize/1.4,
-      rupeeKeyX = 79.5 * canvas.scale,
-      rupeeArrowY = 4 * canvas.scale,
-      arrowBombX = 109.5 * canvas.scale, 
-      keyBombY = 16 * canvas.scale,
-      rupeeKeyTxtX = 90 * canvas.scale,
-      arrowBombTxtX = 120 * canvas.scale,
-      rupeeArrowTxtY = 13 * canvas.scale,
-      keyBombTxtY = 25 * canvas.scale,
-      slotY = 6 * canvas.scale,
-      slotW = 14 * canvas.scale,
-      slotH = 20 * canvas.scale,
-      slotAX = 150 * canvas.scale,
-      slotBX = 170 * canvas.scale,
-      whiteText = 10 * canvas.scale + "px Courier",
-      slotTextY = 8 * canvas.scale,
-      slotTextAX = 154 * canvas.scale,
-      slotTextBX = 174 * canvas.scale;
+    var miniMapX = 7 * scale,
+      miniMapY = 4 * scale,
+      miniMapW = 67 * scale,
+      miniMapH = 23.5 * scale,
+      amtIconSize = tileSize/1.4,
+      rupeeKeyX = 79.5 * scale,
+      rupeeArrowY = 4 * scale,
+      arrowBombX = 109.5 * scale, 
+      keyBombY = 16 * scale,
+      rupeeKeyTxtX = 90 * scale,
+      arrowBombTxtX = 120 * scale,
+      rupeeArrowTxtY = 13 * scale,
+      keyBombTxtY = 25 * scale,
+      slotY = 6 * scale,
+      slotW = 14 * scale,
+      slotH = 20 * scale,
+      slotAX = 150 * scale,
+      slotBX = 170 * scale,
+      whiteText = 10 * scale + "px Courier",
+      slotTextY = 8 * scale,
+      slotTextAX = 154 * scale,
+      slotTextBX = 174 * scale;
 
     //inventory draw color also helps cover when items leave the screen
-    canvas.gameCtx.fillStyle = "#000";
-    canvas.gameCtx.fillRect(0,0,canvas.cWidth,inventory.size);
+    gameCtx.fillStyle = "#000";
+    gameCtx.fillRect(0,0,cWidth,inventory.size);
     //draw area for minimap
-    canvas.gameCtx.fillStyle = "#777";
-    canvas.gameCtx.fillRect(miniMapX, miniMapY, miniMapW, miniMapH);
+    gameCtx.fillStyle = "#777";
+    gameCtx.fillRect(miniMapX, miniMapY, miniMapW, miniMapH);
     //draw images for amount of things
-    canvas.gameCtx.drawImage(sprite.chr, 270, 225, 16, 16, rupeeKeyX, rupeeArrowY, amtIconSize, amtIconSize);
-    canvas.gameCtx.drawImage(sprite.chr, 360, 255, 16, 16, rupeeKeyX, keyBombY, amtIconSize, amtIconSize);
-    canvas.gameCtx.drawImage(sprite.chr, 179, 195, 16, 16, arrowBombX, rupeeArrowY, amtIconSize, amtIconSize);
-    canvas.gameCtx.drawImage(sprite.chr, 360, 225, 16, 16, arrowBombX, keyBombY, amtIconSize, amtIconSize);
+    gameCtx.drawImage(chr, 270, 225, 16, 16, rupeeKeyX, rupeeArrowY, amtIconSize, amtIconSize);
+    gameCtx.drawImage(chr, 360, 255, 16, 16, rupeeKeyX, keyBombY, amtIconSize, amtIconSize);
+    gameCtx.drawImage(chr, 179, 195, 16, 16, arrowBombX, rupeeArrowY, amtIconSize, amtIconSize);
+    gameCtx.drawImage(chr, 360, 225, 16, 16, arrowBombX, keyBombY, amtIconSize, amtIconSize);
     //draw text for amount of things
-    canvas.gameCtx.font = 10 * canvas.scale + "px Arial";
-    canvas.gameCtx.fillStyle = "#CCC";
-    canvas.gameCtx.fillText("x"+inventory.rupees+"", rupeeKeyTxtX, rupeeArrowTxtY);
-    canvas.gameCtx.fillText("x"+inventory.keys+"", rupeeKeyTxtX, keyBombTxtY);
-    canvas.gameCtx.fillText("x"+inventory.arrows+"", arrowBombTxtX, rupeeArrowTxtY);
-    canvas.gameCtx.fillText("x"+inventory.bombs+"", arrowBombTxtX, keyBombTxtY);
+    gameCtx.font = 10*scale + "px Arial";
+    gameCtx.fillStyle = "#CCC";
+    gameCtx.fillText("x"+inventory.rupees+"", rupeeKeyTxtX, rupeeArrowTxtY);
+    gameCtx.fillText("x"+inventory.keys+"", rupeeKeyTxtX, keyBombTxtY);
+    gameCtx.fillText("x"+inventory.arrows+"", arrowBombTxtX, rupeeArrowTxtY);
+    gameCtx.fillText("x"+inventory.bombs+"", arrowBombTxtX, keyBombTxtY);
     //draw inventory slotA
-    canvas.gameCtx.beginPath();
-    canvas.gameCtx.lineWidth = ""+ this.lineWidth +""
-    canvas.gameCtx.strokeStyle = "#33F";
-    canvas.gameCtx.rect(slotAX, slotY, slotW, slotH);
-    canvas.gameCtx.stroke();
+    gameCtx.beginPath();
+    gameCtx.lineWidth = ""+ this.lineWidth +"";
+    gameCtx.strokeStyle = "#33F";
+    gameCtx.rect(slotAX, slotY, slotW, slotH);
+    gameCtx.stroke();
     //draw inentory slotB
-    canvas.gameCtx.beginPath();
-    canvas.gameCtx.rect(slotBX, slotY, slotW, slotH);
-    canvas.gameCtx.stroke();
+    gameCtx.beginPath();
+    gameCtx.rect(slotBX, slotY, slotW, slotH);
+    gameCtx.stroke();
     //draw slot text
-    canvas.gameCtx.font = whiteText; 
-    canvas.gameCtx.fillStyle = "#CCC";
-    canvas.gameCtx.fillText("A", slotTextAX, slotTextY);
-    canvas.gameCtx.fillText("B", slotTextBX, slotTextY);
+    gameCtx.font = whiteText; 
+    gameCtx.fillStyle = "#CCC";
+    gameCtx.fillText("A", slotTextAX, slotTextY);
+    gameCtx.fillText("B", slotTextBX, slotTextY);
     //draw current item in slot
-    canvas.gameCtx.drawImage(sprite.chr, inventory.slotA.dispX, inventory.slotA.dispY, 16, 16, 149.393 * canvas.scale, 9 * canvas.scale, maps.tileSize, maps.tileSize);
-    canvas.gameCtx.drawImage(sprite.chr, inventory.slotB.dispX, inventory.slotB.dispY, 16, 16, 169.393 * canvas.scale, 9 * canvas.scale, maps.tileSize, maps.tileSize);
+    gameCtx.drawImage(chr, inventory.slotA.dispX, inventory.slotA.dispY, 16, 16, 149.393*scale, 9*scale, tileSize, tileSize);
+    gameCtx.drawImage(chr, inventory.slotB.dispX, inventory.slotB.dispY, 16, 16, 169.393*scale, 9*scale, tileSize, tileSize);
     //draw -life- text
-    canvas.gameCtx.font = this.redText;
-    canvas.gameCtx.fillStyle = "#C33";
-    canvas.gameCtx.fillText("-LIFE-",194 * canvas.scale,11 * canvas.scale);
+    gameCtx.font = this.redText;
+    gameCtx.fillStyle = "#C33";
+    gameCtx.fillText("-LIFE-",194*scale,11*scale);
     //draw current player life
     for(var i = 0; i < player._playerState.maxLife; i+=1) {
+      var sprX = 0,
+        lifePosX = 0,
+        lifePosY = 0;
+
       if(i < player._playerState.life) {
-        var sprX = 244;
+        sprX = 244;
       } else {
-        var sprX = 274;
+        sprX = 274;
       }
       if(i <= 6) {
-        var lifePosX = (192 + i*8) * canvas.scale;
-        var lifePosY = 9;
+        lifePosX = (192 + i*8)* scale;
+        lifePosY = 9;
       } else {
-        var lifePosX = (192 + (i*8- 56)) * canvas.scale;
-        var lifePosY = 18;
+        lifePosX = (192 + (i*8- 56))* scale;
+        lifePosY = 18;
       }
-      canvas.gameCtx.drawImage(sprite.chr, sprX, 195, 16, 16, lifePosX, lifePosY * canvas.scale, maps.tileSize, maps.tileSize);
+      gameCtx.drawImage(chr, sprX, 195, 16, 16, lifePosX, lifePosY*scale, tileSize, tileSize);
     }
-  }
+  };
 
   return {
     inventory: inventory,
     _inventoryState: new inventoryState()
-  }
+  };
   
 })();
