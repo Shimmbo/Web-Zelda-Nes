@@ -1,17 +1,7 @@
-var maps = (function() {
+gApp.maps = (function() {
   "use strict";
 
-  var scale = canvas.scale,
-    cWidth = canvas.width,
-    cHeight = canvas.height,
-    mapCtx = canvas.mapCtx,
-    tiles = sprite.tiles,
-    size = sprite.size;
-
-  var tileSize = 16 * scale,
-    gridWidth = cWidth / tileSize,
-    gridHeight = (cHeight-40) / tileSize,
-    map1 = [
+  var map1 = [
     [2,2,2,2,2,2,2,2,2,0,0,2,2,2,2,2],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],
@@ -105,12 +95,10 @@ var maps = (function() {
     
     this.update = function() {
 
-      var weaponsOut = item.weaponsOut;
-
       /*CLEAR ITEMS WHEN CHANGING ROOMS*/
-      for(var i in weaponsOut) {
-        if(weaponsOut.hasOwnProperty(i)) {
-          delete weaponsOut[i];
+      for(var i in gApp.item.weaponsOut) {
+        if(gApp.item.weaponsOut.hasOwnProperty(i)) {
+          delete gApp.item.weaponsOut[i];
         }
       }
       this.mapCurr = mapList[this.mapY][this.mapX];
@@ -119,36 +107,34 @@ var maps = (function() {
 
     this.render = function() {
 
-      var inventory = inventoryF.inventory;
-
       /*DRAWING CURRENT ROOM*/
       for(var y=0; y < this.mapCurr.length; y+=1) {
         for(var x=0; x < this.mapCurr[y].length; x+=1) {
 
-          this.tileX = x * tileSize;
-          this.tileY = y * tileSize + inventory.size;
+          this.tileX = x * gApp.tileSize;
+          this.tileY = y * gApp.tileSize + gApp.inv.inventory.size;
 
           if(this.mapCurr[y][x] === 0) {
-            mapCtx.drawImage(tiles, 32, 0, size, size, this.tileX, this.tileY, tileSize, tileSize);
+            gApp.canvas.mapCtx.drawImage(gApp.spr.tiles, 32, 0, gApp.spr.size, gApp.spr.size, this.tileX, this.tileY, gApp.tileSize, gApp.tileSize);
           }
           if(this.mapCurr[y][x] === 1) {
-            mapCtx.drawImage(tiles, 16, 0, size, size, this.tileX, this.tileY, tileSize, tileSize);
+            gApp.canvas.mapCtx.drawImage(gApp.spr.tiles, 16, 0, gApp.spr.size, gApp.spr.size, this.tileX, this.tileY, gApp.tileSize, gApp.tileSize);
           }
           if(this.mapCurr[y][x] === 2) {
-            mapCtx.drawImage(tiles, 16, 16, size, size, this.tileX, this.tileY, tileSize, tileSize);
+            gApp.canvas.mapCtx.drawImage(gApp.spr.tiles, 16, 16, gApp.spr.size, gApp.spr.size, this.tileX, this.tileY, gApp.tileSize, gApp.tileSize);
           }
           if(this.mapCurr[y][x] === 3) {
-            mapCtx.drawImage(tiles, 0, 0, size, size, this.tileX, this.tileY, tileSize, tileSize);
+            gApp.canvas.mapCtx.drawImage(gApp.spr.tiles, 0, 0, gApp.spr.size, gApp.spr.size, this.tileX, this.tileY, gApp.tileSize, gApp.tileSize);
           }
           //green tiles
           if(this.mapCurr[y][x] === 4) {
-            mapCtx.drawImage(tiles, 112, 16, size, size, this.tileX, this.tileY, tileSize, tileSize);
+            gApp.canvas.mapCtx.drawImage(gApp.spr.tiles, 112, 16, gApp.spr.size, gApp.spr.size, this.tileX, this.tileY, gApp.tileSize, gApp.tileSize);
           }
           if(this.mapCurr[y][x] === 5) {
-            mapCtx.drawImage(tiles, 112, 0, size, size, this.tileX, this.tileY, tileSize, tileSize);
+            gApp.canvas.mapCtx.drawImage(gApp.spr.tiles, 112, 0, gApp.spr.size, gApp.spr.size, this.tileX, this.tileY, gApp.tileSize, gApp.tileSize);
           }
           if(this.mapCurr[y][x] === 6) {
-            mapCtx.drawImage(tiles, 100, 0, size, size, this.tileX, this.tileY, tileSize, tileSize);
+            gApp.canvas.mapCtx.drawImage(gApp.spr.tiles, 100, 0, gApp.spr.size, gApp.spr.size, this.tileX, this.tileY, gApp.tileSize, gApp.tileSize);
           } 
 
         }
@@ -157,8 +143,7 @@ var maps = (function() {
   };
 
   return {
-    tileSize: tileSize,
-    _mapState: new mapState()
+    State: new mapState()
   };
 
 })();

@@ -1,4 +1,4 @@
-var sprite = (function() {
+gApp.spr = (function() {
   "use strict";
 
   var size = 16;

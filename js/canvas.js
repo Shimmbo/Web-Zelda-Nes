@@ -1,14 +1,12 @@
-var canvas = (function() {
+gApp.canvas = (function() {
   "use strict";
 
   var game = document.getElementById('game-canvas'),
     gameCtx = game.getContext('2d'),
     map = document.getElementById('map-canvas'),
     mapCtx = map.getContext('2d'),
-    scale = 3,
-    cWidth = 256 * scale,
-    cHeight = 208 * scale,
-    scene = true;
+    cWidth = 256 * gApp.scale,
+    cHeight = 208 * gApp.scale;
 
   //Starting Canvas
   var canvasInit = function() {
@@ -23,13 +21,11 @@ var canvas = (function() {
   };
 
   return {
-    scene: scene,
     gameCtx: gameCtx,
     mapCtx: mapCtx,
-    scale: scale,
-    width: cWidth,
-    height: cHeight,
-    _canvasInit: new canvasInit()
+    cWidth: cWidth,
+    cHeight: cHeight,
+    Init: new canvasInit()
   };
 
 })();

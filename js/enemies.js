@@ -1,7 +1,5 @@
-var enemy = (function(){
+gApp.enemy = (function(){
   "use strict";
-
-  var tileSize = maps.tileSize;
 
   var enemyState = function() {
 

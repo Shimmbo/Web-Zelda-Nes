@@ -1,4 +1,4 @@
-var item = (function(){
+gApp.item = (function(){
   "use strict";
 
   /*ALL ITEMS FOR ATTACK*/
@@ -42,15 +42,6 @@ var item = (function(){
 
   };
 
-  var _playerState = null,
-    inventory = null,
-    scale = canvas.scale,
-    cWidth = canvas.width,
-    cHeight = canvas.height,
-    gameCtx = canvas.gameCtx,
-    tileSize = maps.tileSize,
-    chr = sprite.chr;
-
   var weaponsOut = {},
     weaponsOutIndex = 0;
 
@@ -64,19 +55,16 @@ var item = (function(){
       counter = 0,
       stopCounter = 0;
 
-    _playerState = player._playerState;
-    inventory = inventoryF.inventory;
-
     this.id = weaponsOutIndex;
-    this.x = _playerState.x;
-    this.y = _playerState.y;
-    this.dir = _playerState.sprX;
+    this.x = gApp.player.State.x;
+    this.y = gApp.player.State.y;
+    this.dir = gApp.player.State.sprX;
     this.itemX = 0;
     this.itemY = 0;
     this.moveX = 0;
     this.moveY = 0;
     this.type = null;
-    this.bombsAmt = inventory.bombs;
+    this.bombsAmt = gApp.inv.inventory.bombs;
 
     this.init = function(type, locX, locY) {
 
@@ -87,46 +75,46 @@ var item = (function(){
         stopCounter = type.timer;
         this.itemX = this.dir + type.sprX;
         this.itemY = type.sprY;
-        if(type.type === weapons.bow.CV.type && inventory.arrows > 0) {
-          inventory.arrows -= 1;
-        } else if(type.type === weapons.bow.CV.type && inventory.arrows <= 0){
+        if(type.type === weapons.bow.CV.type && gApp.inv.inventory.arrows > 0) {
+          gApp.inv.inventory.arrows -= 1;
+        } else if(type.type === weapons.bow.CV.type && gApp.inv.inventory.arrows <= 0){
           delete weaponsOut[this.id];
         }
         
         switch(this.dir / 30) {
           case 0:
-            this.y += tileSize-5* scale;
-            this.x += 1* scale;
+            this.y += gApp.tileSize-5* gApp.scale;
+            this.x += 1* gApp.scale;
             if(type.type === weapons.bow.CV.type) {
-              this.moveY = +4* scale;
+              this.moveY = +4* gApp.scale;
             }
             break;
           case 1:
-            this.x -= tileSize-4* scale;
-            this.y += 1* scale;
+            this.x -= gApp.tileSize-4* gApp.scale;
+            this.y += 1* gApp.scale;
             if(type.type === weapons.bow.CV.type) {
-              this.moveX = -(4* scale);
+              this.moveX = -(4* gApp.scale);
             }
             break;
           case 2:
-            this.y -= tileSize-4* scale;
-            this.x -= 1* scale;
+            this.y -= gApp.tileSize-4* gApp.scale;
+            this.x -= 1* gApp.scale;
             if(type.type === weapons.bow.CV.type) {
-              this.moveY = -(4* scale);
+              this.moveY = -(4* gApp.scale);
             }
             break;
           case 3:
-            this.x += tileSize-5* scale;
-            this.y += 1* scale;
+            this.x += gApp.tileSize-5* gApp.scale;
+            this.y += 1* gApp.scale;
             if(type.type === weapons.bow.CV.type) {
-              this.moveX = +4* scale;
+              this.moveX = +4* gApp.scale;
             }
             break;
         }
       }
       else if(type === weapons.bomb.V1) {
         if (this.bombsAmt > 0) {
-          inventory.bombs -= 1;
+          gApp.inv.inventory.bombs -= 1;
           stopCounter = type.timer;
           this.itemX = type.sprX;
           this.itemY = type.sprY;
@@ -136,8 +124,8 @@ var item = (function(){
         stopCounter = Math.floor((Math.random()* 260) + 160);
         this.itemX = type.sprX;
         this.itemY = type.sprY;
-        this.x = locX + Math.floor((Math.random()* (40* scale)) + 10* scale)-26* scale;
-        this.y = locY + Math.floor((Math.random()* (40* scale)) + 10* scale)-26* scale;
+        this.x = locX + Math.floor((Math.random()* (40* gApp.scale)) + 10* gApp.scale)-26* gApp.scale;
+        this.y = locY + Math.floor((Math.random()* (40* gApp.scale)) + 10* gApp.scale)-26* gApp.scale;
       }
     };
 
@@ -168,22 +156,22 @@ var item = (function(){
       /*REMOVES ITEMS OUTSIDE OF VIEW*/
       this.x += this.moveX;
       this.y += this.moveY;
-      if(this.x < 0-tileSize) {
+      if(this.x < 0-gApp.tileSize) {
         delete weaponsOut[this.id];
       }
-      if(this.x > cWidth) {
+      if(this.x > gApp.canvas.cWidth) {
         delete weaponsOut[this.id];
       }
-      if(this.y < 0-tileSize+inventory.size) {
+      if(this.y < 0-gApp.tileSize+gApp.inv.inventory.size) {
         delete weaponsOut[this.id];
       }
-      if(this.y > cHeight) {
+      if(this.y > gApp.canvas.cHeight) {
         delete weaponsOut[this.id];
       }
     };
 
     this.render = function() {
-      gameCtx.drawImage(chr, this.itemX, this.itemY, 16, 16, this.x, this.y, tileSize, tileSize);
+      gApp.canvas.gameCtx.drawImage(gApp.spr.chr, this.itemX, this.itemY, 16, 16, this.x, this.y, gApp.tileSize, gApp.tileSize);
     };
   };
 
@@ -220,7 +208,7 @@ var item = (function(){
     weapons: weapons,
     weaponsOut: weaponsOut,
     weaponInit: weaponInit,
-    _weaponState: new weaponState()
+    State: new weaponState()
   };
 
 })();
