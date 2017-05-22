@@ -159,19 +159,19 @@ gApp.item = (function(){
       if(this.x < 0-gApp.tileSize) {
         delete weaponsOut[this.id];
       }
-      if(this.x > gApp.canvas.cWidth) {
+      if(this.x > gApp.cWidth) {
         delete weaponsOut[this.id];
       }
       if(this.y < 0-gApp.tileSize+gApp.inv.inventory.size) {
         delete weaponsOut[this.id];
       }
-      if(this.y > gApp.canvas.cHeight) {
+      if(this.y > gApp.cHeight) {
         delete weaponsOut[this.id];
       }
     };
 
     this.render = function() {
-      gApp.canvas.gameCtx.drawImage(gApp.spr.chr, this.itemX, this.itemY, 16, 16, this.x, this.y, gApp.tileSize, gApp.tileSize);
+      image(gApp.spr.chr, this.x, this.y, gApp.tileSize, gApp.tileSize, this.itemX, this.itemY, 16, 16, );
     };
   };
 

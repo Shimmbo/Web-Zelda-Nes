@@ -75,7 +75,7 @@ gApp.player = (function(){
           } else {
             gApp.maps.State.mapY -= 1;
             gApp.scene = true;
-            this.y = gApp.canvas.cHeight-gApp.tileSize;
+            this.y = gApp.cHeight-gApp.tileSize;
           }
 
         }
@@ -90,7 +90,7 @@ gApp.player = (function(){
           } else{
             gApp.maps.State.mapX -= 1;
             gApp.scene = true;
-            this.x = gApp.canvas.cWidth-gApp.tileSize;
+            this.x = gApp.cWidth-gApp.tileSize;
           }
         }
         //down
@@ -98,7 +98,7 @@ gApp.player = (function(){
           this.sprY = 0;
           this.sprX = 0;
           this.aniWalk = true;
-          if ((this.y + gApp.tileSize) < gApp.canvas.cHeight) {
+          if ((this.y + gApp.tileSize) < gApp.cHeight) {
             gApp.collision.checkMove(this.x, this.y+this.speed+6*gApp.scale, gApp.tileSize, gApp.tileSize-6*gApp.scale, this.speed, 'down', this, 6*gApp.scale);
             this.y += this.speed;
           } else{
@@ -113,7 +113,7 @@ gApp.player = (function(){
           this.sprY = 0;
           this.sprX = 90;
           this.aniWalk = true;
-          if((this.x + gApp.tileSize) < gApp.canvas.cWidth) {
+          if((this.x + gApp.tileSize) < gApp.cWidth) {
             gApp.collision.checkMove(this.x+this.speed, this.y+6*gApp.scale, gApp.tileSize, gApp.tileSize-6*gApp.scale, this.speed, 'right', this);
             this.x += this.speed;
           } else{
@@ -134,7 +134,7 @@ gApp.player = (function(){
     };
 
     this.render = function() {
-      gApp.canvas.gameCtx.drawImage(gApp.spr.chr, this.sprX, this.sprY, gApp.spr.size, gApp.spr.size, this.x, this.y, gApp.tileSize, gApp.tileSize);
+      image(gApp.spr.chr, this.x, this.y, gApp.tileSize, gApp.tileSize, this.sprX, this.sprY, gApp.spr.size, gApp.spr.size);
     };
   };
 

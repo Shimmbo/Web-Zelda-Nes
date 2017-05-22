@@ -7,14 +7,14 @@ gApp.inv = (function(){
     slotB: 0,
     storage: {
       0:gApp.item.weapons.sword.V1,
-      1:gApp.item.weapons.bomb.V1,
-      2:gApp.item.weapons.sword.V2,
-      3:gApp.item.weapons.sword.V3,
-      4:gApp.item.weapons.candle.V1,
-      5:gApp.item.weapons.bow.V2,
-      6:gApp.item.weapons.bow.V3,
-      7:gApp.item.weapons.candle.V2,
-      8:gApp.item.weapons.bow.V1,
+      1:0,
+      2:0,
+      3:0,
+      4:0,
+      5:0,
+      6:0,
+      7:0,
+      8:0,
       9:0,
       10:0,
       11:0,
@@ -27,10 +27,10 @@ gApp.inv = (function(){
       18:0,
       19:0
     },
-    rupees: 11,
+    rupees: 0,
     keys: 0,
-    arrows: 14,
-    bombs: 6
+    arrows: 0,
+    bombs: 0
   };
 
   var inventoryState = function() {
@@ -84,14 +84,14 @@ gApp.inv = (function(){
     this.render = function() {
 
       /*RENDER INVENTORY STUFF*/
-      inventoryTop.bind(this)(gApp.scale, gApp.tileSize, gApp.canvas.gameCtx);
+      inventoryTop.bind(this)(gApp.scale, gApp.tileSize);
       if(this.opened === true) {
-        inventoryFull.bind(this)(gApp.scale, gApp.tileSize, gApp.canvas.gameCtx);
+        inventoryFull.bind(this)(gApp.scale, gApp.tileSize);
       }
     };
   };
 
-  var inventoryFull = function(scale, tileSize, ctx) {
+  var inventoryFull = function(scale, tileSize) {
 
     var itemX = 0,
       itemY = 34;
@@ -110,24 +110,21 @@ gApp.inv = (function(){
       this.storageSlot -= 4;
     }
 
-    ctx.fillStyle = "#111";
-    ctx.fillRect(0,inventory.size, gApp.canvas.cWidth, gApp.canvas.cHeight-inventory.size);
+    fill("#111");
+    rect(0,inventory.size, gApp.cWidth, gApp.cHeight - inventory.size);
     //navigation cursor
-    ctx.beginPath();
-    ctx.strokeStyle = "#F77";
-    ctx.moveTo(this.cursorX*scale, this.cursorY*scale);
-    ctx.lineTo((this.cursorX+13)*scale, this.cursorY*scale);
-    ctx.fillStyle = "#000";
-    ctx.stroke();
+    stroke("#F77");
+    line(this.cursorX * scale, this.cursorY * scale, (this.cursorX + 13) * scale, this.cursorY * scale)
+    fill("#000");
+    
     //inventory red text
-    ctx.font = this.redText;
-    ctx.fillStyle = "#C33";
-    ctx.fillText("Inventory",18*scale,50*scale);
+    textFont(this.redText);
+    fill("#C33");
+    text("Inventory", 18 * scale, 50 * scale);
     //inventory blue box
-    ctx.beginPath();
-    ctx.strokeStyle = "#33F";
-    ctx.rect(10*scale,56*scale,94*scale,142*scale);
-    ctx.stroke();
+    stroke("#33F");
+    rect(10 * scale, 56 * scale, 94 * scale, 142 * scale);
+    
     //inventory items
     for(var i in inventory.storage) {
       if(inventory.storage.hasOwnProperty(i)) {
@@ -135,7 +132,8 @@ gApp.inv = (function(){
         if(i % 4 === 0) {
           itemY += 28;
         }
-        ctx.drawImage(gApp.spr.chr, inventory.storage[i].dispX, inventory.storage[i].dispY, 16, 16, itemX*scale, itemY*scale, tileSize, tileSize);
+        if (inventory.storage[i].dispX != undefined && inventory.storage[i].dispY != undefined)
+          image(gApp.spr.chr, itemX*scale, itemY*scale, tileSize, tileSize, inventory.storage[i].dispX, inventory.storage[i].dispY, 16, 16);
       }
     }
     //triforce red text
@@ -144,7 +142,7 @@ gApp.inv = (function(){
     ctx.fillText("Triforce",150*scale,180*scale);*/
   };
 
-  var inventoryTop = function(scale, tileSize, ctx) {
+  var inventoryTop = function(scale, tileSize) {
 
     /*INVENTORY TOP DISPLAY*/
     var miniMapX = 7 * scale,
@@ -171,45 +169,45 @@ gApp.inv = (function(){
       slotTextBX = 174 * scale;
 
     //inventory draw color also helps cover when items leave the screen
-    ctx.fillStyle = "#000";
-    ctx.fillRect(0, 0, gApp.canvas.cWidth, inventory.size);
+    fill("#000");
+    rect(0, 0, gApp.cWidth, inventory.size);
     //draw area for minimap
-    ctx.fillStyle = "#777";
-    ctx.fillRect(miniMapX, miniMapY, miniMapW, miniMapH);
+    fill("#777");
+    rect(miniMapX, miniMapY, miniMapW, miniMapH);
     //draw images for amount of things
-    ctx.drawImage(gApp.spr.chr, 270, 225, 16, 16, rupeeKeyX, rupeeArrowY, amtIconSize, amtIconSize);
-    ctx.drawImage(gApp.spr.chr, 360, 255, 16, 16, rupeeKeyX, keyBombY, amtIconSize, amtIconSize);
-    ctx.drawImage(gApp.spr.chr, 179, 195, 16, 16, arrowBombX, rupeeArrowY, amtIconSize, amtIconSize);
-    ctx.drawImage(gApp.spr.chr, 360, 225, 16, 16, arrowBombX, keyBombY, amtIconSize, amtIconSize);
+    image(gApp.spr.chr, rupeeKeyX, rupeeArrowY, amtIconSize, amtIconSize, 270, 225, 16, 16, );
+    image(gApp.spr.chr, rupeeKeyX, keyBombY, amtIconSize, amtIconSize, 360, 255, 16, 16, );
+    image(gApp.spr.chr, arrowBombX, rupeeArrowY, amtIconSize, amtIconSize, 179, 195, 16, 16, );
+    image(gApp.spr.chr, arrowBombX, keyBombY, amtIconSize, amtIconSize, 360, 225, 16, 16, );
     //draw text for amount of things
-    ctx.font = 10*scale + "px Arial";
-    ctx.fillStyle = "#CCC";
-    ctx.fillText("x"+inventory.rupees+"", rupeeKeyTxtX, rupeeArrowTxtY);
-    ctx.fillText("x"+inventory.keys+"", rupeeKeyTxtX, keyBombTxtY);
-    ctx.fillText("x"+inventory.arrows+"", arrowBombTxtX, rupeeArrowTxtY);
-    ctx.fillText("x"+inventory.bombs+"", arrowBombTxtX, keyBombTxtY);
+    textFont(10 * scale + "px Arial");
+    fill("#CCC");
+    text("x" + inventory.rupees + "", rupeeKeyTxtX, rupeeArrowTxtY);
+    text("x" + inventory.keys + "", rupeeKeyTxtX, keyBombTxtY);
+    text("x" + inventory.arrows + "", arrowBombTxtX, rupeeArrowTxtY);
+    text("x" + inventory.bombs + "", arrowBombTxtX, keyBombTxtY);
     //draw inventory slotA
-    ctx.beginPath();
-    ctx.lineWidth = ""+ this.lineWidth +"";
-    ctx.strokeStyle = "#33F";
-    ctx.rect(slotAX, slotY, slotW, slotH);
-    ctx.stroke();
+    strokeWeight(this.lineWidth);
+    stroke("#33F");
+    rect(slotAX, slotY, slotW, slotH);
+    
     //draw inentory slotB
-    ctx.beginPath();
-    ctx.rect(slotBX, slotY, slotW, slotH);
-    ctx.stroke();
+    rect(slotBX, slotY, slotW, slotH);
+    
     //draw slot text
-    ctx.font = whiteText; 
-    ctx.fillStyle = "#CCC";
-    ctx.fillText("A", slotTextAX, slotTextY);
-    ctx.fillText("B", slotTextBX, slotTextY);
+    textFont(whiteText); 
+    fill("#CCC");
+    text("A", slotTextAX, slotTextY);
+    text("B", slotTextBX, slotTextY);
     //draw current item in slot
-    ctx.drawImage(gApp.spr.chr, inventory.slotA.dispX, inventory.slotA.dispY, 16, 16, 149.393*scale, 9*scale, tileSize, tileSize);
-    ctx.drawImage(gApp.spr.chr, inventory.slotB.dispX, inventory.slotB.dispY, 16, 16, 169.393*scale, 9*scale, tileSize, tileSize);
+    if (inventory.slotA.dispX != undefined && inventory.slotA.dispY != undefined)
+      image(gApp.spr.chr, 149.393*scale, 9*scale, tileSize, tileSize, inventory.slotA.dispX, inventory.slotA.dispY, 16, 16, );
+    if (inventory.slotB.dispX != undefined && inventory.slotB.dispY != undefined)
+      image(gApp.spr.chr, 169.393*scale, 9*scale, tileSize, tileSize, inventory.slotB.dispX, inventory.slotB.dispY, 16, 16, );
     //draw -life- text
-    ctx.font = this.redText;
-    ctx.fillStyle = "#C33";
-    ctx.fillText("-LIFE-",194*scale,11*scale);
+    textFont(this.redText);
+    fill("#C33");
+    text("-LIFE-", 194 * scale, 11 * scale);
     //draw current player life
     for(var i = 0; i < gApp.player.State.maxLife; i+=1) {
       var sprX = 0,
@@ -224,7 +222,7 @@ gApp.inv = (function(){
         lifePosY = 18;
       }
 
-      ctx.drawImage(gApp.spr.chr, 274, 195, 16, 16, lifePosX, lifePosY*scale, tileSize, tileSize);
+      image(gApp.spr.chr, lifePosX, lifePosY*scale, tileSize, tileSize, 274, 195, 16, 16, );
 
       if(i < gApp.player.State.life) {
         if(i+1 > gApp.player.State.life) {
@@ -234,7 +232,7 @@ gApp.inv = (function(){
         } else {
           sprX = 244;
         }
-        ctx.drawImage(gApp.spr.chr, sprX, 195, 16, 16, lifePosX, lifePosY*scale, tileSize, tileSize);
+        image(gApp.spr.chr, sprX, lifePosX, lifePosY*scale, tileSize, tileSize, 195, 16, 16, );
       }
 
     }
