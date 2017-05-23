@@ -113,7 +113,7 @@ gApp.maps = (function() {
           this.tileX = x * gApp.tileSize;
           this.tileY = y * gApp.tileSize + gApp.inv.inventory.size;
 
-          if(this.mapCurr[y][x] === 0) {
+          if(this.mapCurr[y][x] === 0 || this.mapCurr[y][x] > 6) {
             image(gApp.spr.tiles, this.tileX, this.tileY, gApp.tileSize, gApp.tileSize, 32, 0, gApp.spr.size, gApp.spr.size, );
           }
           if(this.mapCurr[y][x] === 1) {
@@ -145,16 +145,16 @@ gApp.maps = (function() {
           this.tileX = x * gApp.tileSize;
           this.tileY = y * gApp.tileSize + gApp.inv.inventory.size;
           if(this.mapCurr[y][x] === 7) {
-            gApp.enemy.State.enemies.push(new gApp.enemy.Enemy(this.tileX, this.tileY, .5, .5, "red_m", 96, 0, x, y));
+            gApp.enemy.State.enemies.push(new gApp.enemy.Enemy(this.tileX, this.tileY, "red_m", x, y));
           } 
           if(this.mapCurr[y][x] === 8) {
-            gApp.enemy.State.enemies.push(new gApp.enemy.Enemy(this.tileX, this.tileY, .5, 1, "blue_m", 224, 0, x, y));
+            gApp.enemy.State.enemies.push(new gApp.enemy.Enemy(this.tileX, this.tileY, "blue_m", x, y));
           } 
           if(this.mapCurr[y][x] === 9) {
-            gApp.enemy.State.enemies.push(new gApp.enemy.Enemy(this.tileX, this.tileY, 1, 1, "red_c", 416, 0, x, y));
+            gApp.enemy.State.enemies.push(new gApp.enemy.Enemy(this.tileX, this.tileY, "red_c", x, y));
           } 
           if(this.mapCurr[y][x] === 10) {
-            gApp.enemy.State.enemies.push(new gApp.enemy.Enemy(this.tileX, this.tileY, 2, 1, "blue_c", 544, 0, x, y));
+            gApp.enemy.State.enemies.push(new gApp.enemy.Enemy(this.tileX, this.tileY, "blue_c", x, y));
           }
         }
       }

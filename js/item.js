@@ -46,7 +46,7 @@ gApp.item = (function(){
     weaponsOutIndex = 0;
 
   /*WEAPON CREATION FOR PLAYER USE*/
-  var weaponProto = function() {
+  var weaponProto = function(entity) {
 
     weaponsOutIndex += 1;
     weaponsOut[weaponsOutIndex] = this;
@@ -56,8 +56,9 @@ gApp.item = (function(){
       stopCounter = 0;
 
     this.id = weaponsOutIndex;
-    this.x = gApp.player.State.x;
-    this.y = gApp.player.State.y;
+    this.x = entity == undefined ? gApp.player.State.x : entity.x;
+    this.y = entity == undefined ? gApp.player.State.y : entity.y;
+    this.isPlayer = entity == undefined;
     this.dir = gApp.player.State.sprX;
     this.itemX = 0;
     this.itemY = 0;
@@ -65,7 +66,6 @@ gApp.item = (function(){
     this.moveY = 0;
     this.type = null;
     this.bombsAmt = gApp.inv.inventory.bombs;
-
     this.init = function(type, locX, locY) {
 
       this.type = type;
@@ -172,15 +172,16 @@ gApp.item = (function(){
 
     this.render = function() {
       image(gApp.spr.chr, this.x, this.y, gApp.tileSize, gApp.tileSize, this.itemX, this.itemY, 16, 16, );
+      gApp.collision.checkHit(this.x + gApp.tileSize, this.y + gApp.tileSize, this.type.damage, this.isPlayer);
     };
   };
 
   /*ITEM CREATION FUNCTION*/
-  function weaponInit(type, amt, locX, locY) {
+  function weaponInit(type, amt, locX, locY, entity) {
     amt = amt || 1;
 
     for(var i = 0; i < amt; i+=1) {
-      new weaponProto().init(type, locX, locY);
+      new weaponProto(entity).init(type, locX, locY);
     }
   }
 

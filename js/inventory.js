@@ -222,7 +222,7 @@ gApp.inv = (function(){
         lifePosY = 18;
       }
 
-      image(gApp.spr.chr, lifePosX, lifePosY*scale, tileSize, tileSize, 274, 195, 16, 16, );
+      image(gApp.spr.chr, lifePosX, lifePosY*scale, tileSize, tileSize, 274, 195, 16, 16 );
 
       if(i < gApp.player.State.life) {
         if(i+1 > gApp.player.State.life) {
@@ -232,7 +232,7 @@ gApp.inv = (function(){
         } else {
           sprX = 244;
         }
-        image(gApp.spr.chr, sprX, lifePosX, lifePosY*scale, tileSize, tileSize, 195, 16, 16, );
+        image(gApp.spr.chr, lifePosX, lifePosY*scale, tileSize, tileSize, sprX, 195, 16, 16);
       }
 
     }

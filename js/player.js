@@ -18,7 +18,8 @@ gApp.player = (function(){
     this.aniWalk = false;
     this.aniAttack = false;
     this.aniCounter = 0;
-
+    this.inmune = 160;
+    this.inmuneCount = 0;
     this.pressed = function(keyInput) {
 
       if(gApp.inv.State.opened === false) {
@@ -60,6 +61,9 @@ gApp.player = (function(){
     };
 
     this.update = function() {
+      if (this.inmuneCount !== 0) {
+          this.inmuneCount--;
+      } 
 
       if(gApp.inv.State.opened === false) {
 
@@ -70,7 +74,7 @@ gApp.player = (function(){
           this.sprX = 60;
           this.aniWalk = true;
           if(this.y > 0 + gApp.inv.inventory.size) {
-            gApp.collision.checkMove(this.x, this.y-this.speed+6*gApp.scale, gApp.tileSize, gApp.tileSize-6*gApp.scale, this.speed, 'up', this);
+            gApp.collision.checkMove(this.x, this.y-this.speed+6*gApp.scale, gApp.tileSize, gApp.tileSize-6*gApp.scale, this.speed, 'up', this, undefined, true);
             this.y -= this.speed;
           } else {
             gApp.maps.State.mapY -= 1;
@@ -85,7 +89,7 @@ gApp.player = (function(){
           this.sprX = 30;
           this.aniWalk = true;
           if(this.x > 0) {
-            gApp.collision.checkMove(this.x-this.speed, this.y+6*gApp.scale, gApp.tileSize, gApp.tileSize-6*gApp.scale, this.speed, 'left', this);
+            gApp.collision.checkMove(this.x-this.speed, this.y+6*gApp.scale, gApp.tileSize, gApp.tileSize-6*gApp.scale, this.speed, 'left', this, undefined, true);
             this.x -= this.speed;
           } else{
             gApp.maps.State.mapX -= 1;
@@ -99,7 +103,7 @@ gApp.player = (function(){
           this.sprX = 0;
           this.aniWalk = true;
           if ((this.y + gApp.tileSize) < gApp.cHeight) {
-            gApp.collision.checkMove(this.x, this.y+this.speed+6*gApp.scale, gApp.tileSize, gApp.tileSize-6*gApp.scale, this.speed, 'down', this, 6*gApp.scale);
+            gApp.collision.checkMove(this.x, this.y+this.speed+6*gApp.scale, gApp.tileSize, gApp.tileSize-6*gApp.scale, this.speed, 'down', this, 6*gApp.scale, true);
             this.y += this.speed;
           } else{
             gApp.maps.State.mapY += 1;
@@ -114,7 +118,7 @@ gApp.player = (function(){
           this.sprX = 90;
           this.aniWalk = true;
           if((this.x + gApp.tileSize) < gApp.cWidth) {
-            gApp.collision.checkMove(this.x+this.speed, this.y+6*gApp.scale, gApp.tileSize, gApp.tileSize-6*gApp.scale, this.speed, 'right', this);
+            gApp.collision.checkMove(this.x+this.speed, this.y+6*gApp.scale, gApp.tileSize, gApp.tileSize-6*gApp.scale, this.speed, 'right', this, undefined, true);
             this.x += this.speed;
           } else{
             gApp.maps.State.mapX += 1;
@@ -136,6 +140,13 @@ gApp.player = (function(){
     this.render = function() {
       image(gApp.spr.chr, this.x, this.y, gApp.tileSize, gApp.tileSize, this.sprX, this.sprY, gApp.spr.size, gApp.spr.size);
     };
+
+    this.gotHurt = function(damage) {
+      if(this.inmuneCount == 0) {
+        this.life -= damage;
+        this.inmuneCount = this.inmune;
+      }
+    }
   };
 
   return {
