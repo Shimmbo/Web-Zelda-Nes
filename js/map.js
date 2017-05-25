@@ -103,8 +103,8 @@ gApp.maps = (function() {
     this.tileY = 0;
     this.shiftX = 0;
     this.shiftY = 0;
-    this.mapX = 2;
-    this.mapY = 2;
+    this.mapX = 0;
+    this.mapY = 1;
     this.mapCurr = mapList[this.mapY][this.mapX];
     
     this.update = function() {
