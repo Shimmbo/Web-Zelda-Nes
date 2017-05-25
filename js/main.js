@@ -24,10 +24,12 @@ function preload() {
     var tiles = loadImage('./img/Overworld.png');
     var chr = loadImage('./img/Character.png');
     var enemy = loadImage('./img/Enemies.png');
+    var bosses = loadImage('./img/Bosses.png');
     return {
       tiles: tiles,
       chr: chr,
       enemies: enemy,
+      bosses: bosses,
       size: size
     }
   })();

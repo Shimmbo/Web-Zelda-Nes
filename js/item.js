@@ -172,7 +172,7 @@ gApp.item = (function(){
 
     this.render = function() {
       image(gApp.spr.chr, this.x, this.y, gApp.tileSize, gApp.tileSize, this.itemX, this.itemY, 16, 16, );
-      gApp.collision.checkHit(this.x + gApp.tileSize, this.y + gApp.tileSize, this.type.damage, this.isPlayer);
+      gApp.collision.checkHit(this.x, this.y, gApp.tileSize, gApp.tileSize-6*gApp.scale, this.type.damage, this.isPlayer);
     };
   };
 

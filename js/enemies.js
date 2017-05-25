@@ -2,6 +2,7 @@ gApp.enemy = (function(){
   "use strict";
     var enemies = {
       red_m: {
+        id:7,
         up: {x:144, y:0},
         left: {x:0, y:0},
         down: {x:48, y:0},
@@ -10,6 +11,8 @@ gApp.enemy = (function(){
         damage:1,
         speed:1,
         attackSpeed:160,
+        size:24,
+        isBoss:false,
         dead: {
           x:1320,
           y: 16,
@@ -17,6 +20,7 @@ gApp.enemy = (function(){
         }
       },
       blue_m: {
+        id:8,
         up:{x:336, y:0},
         left:{x:192, y:0},
         down:{x:240, y:0},
@@ -25,6 +29,8 @@ gApp.enemy = (function(){
         damage:1,
         speed:2,
         attackSpeed:120,
+        size:24,
+        isBoss:false,
         dead: {
           x:1320,
           y: 16,
@@ -32,6 +38,7 @@ gApp.enemy = (function(){
         }
       },
       red_c: {
+        id:9,
         up: {x:624, y:0},
         left: {x:480, y:0},
         down: {x:528, y:0},
@@ -40,6 +47,8 @@ gApp.enemy = (function(){
         damage:1,
         speed:2,
         attackSpeed:80,
+        size:20,
+        isBoss:false,
         weapon: gApp.item.weapons.sword.V1,
         dead: {
           x:1320,
@@ -48,6 +57,7 @@ gApp.enemy = (function(){
         }
       },
       blue_c: {
+        id:10,
         up: {x:816, y:0},
         left: {x:672, y:0},
         down: {x:730, y:0},
@@ -56,6 +66,8 @@ gApp.enemy = (function(){
         damage:2,
         speed:3,
         attackSpeed:50,
+        size:20,
+        isBoss:false,
         weapon: gApp.item.weapons.sword.V2,
         dead: {
           x:1320,
@@ -63,6 +75,24 @@ gApp.enemy = (function(){
           time:120
         }
       },
+      dodongo: {
+        id:11,
+        up: {x:48, y:84},
+        left: {x:24, y:84},
+        down: {x:0, y:84},
+        right: {x:72, y:84},
+        life:40,
+        damage:5,
+        speed:20,
+        size:24,
+        attackSpeed:50,
+        isBoss:true,
+        dead: {
+          x:1320,
+          y: 16,
+          time:120
+        }
+      }
   }
 
   var enemyState = function(x, y, type, mapX, mapY) {
@@ -102,7 +132,7 @@ gApp.enemy = (function(){
           mapY = Math.round((this.y - gApp.inv.inventory.size) / gApp.tileSize);
       if(this.mapX != mapX || this.mapY != mapY) {
         gApp.maps.State.mapCurr[this.mapY][this.mapX] = 0;
-        gApp.maps.State.mapCurr[mapY][mapX] = 7;
+        gApp.maps.State.mapCurr[mapY][mapX] = this.type.id;
         this.mapX = mapX;
         this.mapY = mapY;
       }
@@ -146,7 +176,7 @@ gApp.enemy = (function(){
     }
 
     this.render = function() {
-        image(gApp.spr.enemies, this.x, this.y, gApp.tileSize, gApp.tileSize, this.sprX, this.sprY, 24, 24);
+        image(this.type.isBoss ? gApp.spr.bosses : gApp.spr.enemies, this.x, this.y, gApp.tileSize, gApp.tileSize, this.sprX, this.sprY, this.type.size, this.type.size);
     }
 
     this.gotHurt = function(damage) {
