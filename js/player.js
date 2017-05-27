@@ -146,6 +146,7 @@ gApp.player = (function(){
         this.life -= damage;
         this.inmuneCount = this.inmune;
       }
+      if(this.life <= 0) location.reload();
     }
   };
 
