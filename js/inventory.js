@@ -197,8 +197,8 @@ gApp.inv = (function(){
     //draw slot text
     textFont(whiteText); 
     fill("#CCC");
-    text("A", slotTextAX, slotTextY);
-    text("B", slotTextBX, slotTextY);
+    text("Z", slotTextAX, slotTextY);
+    text("X", slotTextBX, slotTextY);
     //draw current item in slot
     if (inventory.slotA.dispX != undefined && inventory.slotA.dispY != undefined)
       image(gApp.spr.chr, 149.393*scale, 9*scale, tileSize, tileSize, inventory.slotA.dispX, inventory.slotA.dispY, 16, 16, );
