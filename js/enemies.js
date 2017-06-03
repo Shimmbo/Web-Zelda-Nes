@@ -1,5 +1,7 @@
 gApp.enemy = (function(){
-  "use strict";
+    "use strict";
+    var bossSizeVer=31;
+    var bossSizeHor=31;
     var enemies = {
       red_m: {
         id:7,
@@ -39,15 +41,15 @@ gApp.enemy = (function(){
       },
       red_c: {
         id:9,
-        up: {x:624, y:0},
-        left: {x:480, y:0},
-        down: {x:528, y:0},
-        right: {x:576, y:0},
+        up: {x:619, y:6},
+        left: {x:475, y:6},
+        down: {x:523, y:6},
+        right: {x:571, y:6  },
         life:3,
         damage:1,
         speed:2,
         attackSpeed:80,
-        size:20,
+        size:21,
         isBoss:false,
         weapon: gApp.item.weapons.sword.V1,
         dead: {
@@ -58,15 +60,15 @@ gApp.enemy = (function(){
       },
       blue_c: {
         id:10,
-        up: {x:816, y:0},
-        left: {x:672, y:0},
-        down: {x:730, y:0},
-        right: {x:768, y:0},
+        up: {x:809, y:6},
+        left: {x:665, y:6},
+        down: {x:712, y:6},
+        right: {x:763, y:6},
         life:5,
         damage:2,
         speed:3,
         attackSpeed:50,
-        size:20,
+        size:21,
         isBoss:false,
         weapon: gApp.item.weapons.sword.V2,
         dead: {
@@ -77,14 +79,17 @@ gApp.enemy = (function(){
       },
       dodongo: {
         id:11,
-        up: {x:48, y:84},
-        left: {x:24, y:84},
-        down: {x:0, y:84},
-        right: {x:72, y:84},
-        life:20,
-        damage:2,
-        speed:20,
-        size:24,
+        up: {x:83, y:88},
+        left: {x:83, y:88},
+        down: {x:83, y:88},
+        right: {x:83, y:88},
+        shooting: {x:81,y:150},
+        life:40,
+        damage:3,
+        speed:8,
+        sizeX:31,
+        sizeY: 20,
+        weapon: gApp.item.weapons.fireball.V1,
         attackSpeed:50,
         isBoss:true,
         dead: {
@@ -120,7 +125,10 @@ gApp.enemy = (function(){
       if(this.attackCount === 0 && this.type.weapon != undefined) {
         this.attackCount = this.type.attackSpeed;
           this.sprY = 60;
-          gApp.item.weaponInit(this.type.weapon, undefined, undefined, undefined, this);
+          if (this.type.isBoss)
+            gApp.item.weaponInit(this.type.weapon, 1,this.x, this.y, this);
+          else
+            gApp.item.weaponInit(this.type.weapon, undefined, undefined, undefined, this);
           setTimeout(function(){
             this.sprY = 0;
             this.aniAttack = false;
@@ -176,7 +184,13 @@ gApp.enemy = (function(){
     }
 
     this.render = function() {
-        image(this.type.isBoss ? gApp.spr.bosses : gApp.spr.enemies, this.x, this.y, gApp.tileSize, gApp.tileSize, this.sprX, this.sprY, this.type.size, this.type.size);
+      if (this.type.isBoss){
+        image( gApp.spr.bosses, this.x, this.y, gApp.tileSize*2, gApp.tileSize, this.sprX, this.sprY, this.type.sizeX, this.type.sizeY);
+        }
+        else{
+        image( gApp.spr.enemies, this.x, this.y, gApp.tileSize, gApp.tileSize, this.sprX, this.sprY, this.type.size, this.type.size);
+        }
+      
     }
 
     this.gotHurt = function(damage) {
@@ -216,7 +230,11 @@ gApp.enemy = (function(){
 
 var getRandomDirection = function () {
     var random = Math.floor(Math.random() * (4)) + 1;
-
+    if(gApp.maps.State.mapX == 2 && gApp.maps.State.mapY == 2){
+      if (random > 2){
+        random = getRandomDirection();
+      }
+    }
     switch (random) {
         case 1:
             return "up";

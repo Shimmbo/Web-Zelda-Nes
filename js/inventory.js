@@ -7,7 +7,7 @@ gApp.inv = (function(){
     slotB: 0,
     storage: {
       0:gApp.item.weapons.sword.V1,
-      1:0,
+      1:gApp.item.weapons.bow.V1,
       2:0,
       3:0,
       4:0,
@@ -29,7 +29,7 @@ gApp.inv = (function(){
     },
     rupees: 0,
     keys: 0,
-    arrows: 0,
+    arrows: 10,
     bombs: 0
   };
 

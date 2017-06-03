@@ -60,6 +60,10 @@ gApp.collision = (function() {
             })[0];
             if (px < tileX+gApp.tileSize && px + pw > tileX && py < tileY+gApp.tileSize && py + ph > tileY) {
               entity.gotHurt(damage);
+              var weaponArr = Object.keys(gApp.item.weaponsOut).map(function (key) { return gApp.item.weaponsOut[key]; });
+              if (weaponArr.length > 0)
+              	delete gApp.item.weaponsOut[weaponArr[0].id];
+              gApp.item.State.render();
             }
           }
         }

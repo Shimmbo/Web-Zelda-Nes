@@ -23,6 +23,10 @@ gApp.item = (function(){
       CV: {type: 'candle'},
       V1: {type: 'candle', damage:1, sprX:390, sprY:195, dispX:390, dispY:195},
       V2: {type: 'candle', damage:1, sprX:420, sprY:195, dispX:420, dispY:195}
+    },
+    fireball: {
+      CV: {type: 'fireball'},
+      V1:  {type: 'fireball', damage:3, sprX:1350, sprY:35, timer:1000000, dispX:60, dispY: 195}
     }
   };
 
@@ -65,51 +69,63 @@ gApp.item = (function(){
     this.moveX = 0;
     this.moveY = 0;
     this.type = null;
+    this.isBoss = entity == undefined? false : entity.type.isBoss;
     this.bombsAmt = gApp.inv.inventory.bombs;
     this.init = function(type, locX, locY) {
 
       this.type = type;
 
       /*DIFFERENT ITEM FUNCTIONALITY ON CREATION*/
-      if(type.type === weapons.sword.CV.type || type.type === weapons.bow.CV.type) {
+      if(type.type === weapons.sword.CV.type || type.type === weapons.bow.CV.type || weapons.fireball.CV.type) {
         stopCounter = type.timer;
-        this.itemX = this.dir + type.sprX;
+        this.itemX =  type.sprX;
+        if (type.type != weapons.fireball.CV.type)
+          this.itemX+=this.dir;
         this.itemY = type.sprY;
         if(type.type === weapons.bow.CV.type && gApp.inv.inventory.arrows > 0) {
           gApp.inv.inventory.arrows -= 1;
         } else if(type.type === weapons.bow.CV.type && gApp.inv.inventory.arrows <= 0){
           delete weaponsOut[this.id];
         }
-        
-        switch(this.dir / 30) {
-          case 0:
-            this.y += gApp.tileSize-5* gApp.scale;
-            this.x += 1* gApp.scale;
-            if(type.type === weapons.bow.CV.type) {
-              this.moveY = +4* gApp.scale;
-            }
-            break;
-          case 1:
-            this.x -= gApp.tileSize-4* gApp.scale;
-            this.y += 1* gApp.scale;
-            if(type.type === weapons.bow.CV.type) {
-              this.moveX = -(4* gApp.scale);
-            }
-            break;
-          case 2:
-            this.y -= gApp.tileSize-4* gApp.scale;
-            this.x -= 1* gApp.scale;
-            if(type.type === weapons.bow.CV.type) {
-              this.moveY = -(4* gApp.scale);
-            }
-            break;
-          case 3:
-            this.x += gApp.tileSize-5* gApp.scale;
-            this.y += 1* gApp.scale;
-            if(type.type === weapons.bow.CV.type) {
-              this.moveX = +4* gApp.scale;
-            }
-            break;
+
+        if (this.isPlayer){
+          switch(this.dir / 30) {
+            case 0:
+              this.y += gApp.tileSize-5* gApp.scale;
+              this.x += 1* gApp.scale;
+              if(type.type === weapons.bow.CV.type || type.type === weapons.fireball.CV.type) {
+                this.moveY = +4* gApp.scale;
+              }
+              break;
+            case 1:
+              this.x -= gApp.tileSize-4* gApp.scale;
+              this.y += 1* gApp.scale;
+              if(type.type === weapons.bow.CV.type || type.type === weapons.fireball.CV.type) {
+                this.moveX = -(4* gApp.scale);
+              }
+              break;
+            case 2:
+              this.y -= gApp.tileSize-4* gApp.scale;
+              this.x -= 1* gApp.scale;
+              if(type.type === weapons.bow.CV.type || type.type === weapons.fireball.CV.type) {
+                this.moveY = -(4* gApp.scale);
+              }
+              break;
+            case 3:
+              this.x += gApp.tileSize-5* gApp.scale;
+              this.y += 1* gApp.scale;
+              if(type.type === weapons.bow.CV.type || type.type === weapons.fireball.CV.type) {
+                this.moveX = +4* gApp.scale;
+              }
+              break;
+          }
+        }else if(this.isBoss){
+              this.x += gApp.tileSize-5* gApp.scale;
+              this.y += 1* gApp.scale;
+              if(type.type === weapons.bow.CV.type || type.type === weapons.fireball.CV.type) {
+                this.moveX = +4* gApp.scale;
+                this.render();
+              }
         }
       }
       else if(type === weapons.bomb.V1) {
@@ -171,7 +187,8 @@ gApp.item = (function(){
     };
 
     this.render = function() {
-      image(gApp.spr.chr, this.x, this.y, gApp.tileSize, gApp.tileSize, this.itemX, this.itemY, 16, 16, );
+      //Switch sprite file
+      image(this.type.type === "fireball" ? gApp.spr.enemies : gApp.spr.chr, this.x, this.y, gApp.tileSize, gApp.tileSize, this.itemX, this.itemY, 16, 16, );
       gApp.collision.checkHit(this.x, this.y, gApp.tileSize, gApp.tileSize-6*gApp.scale, this.type.damage, this.isPlayer);
     };
   };

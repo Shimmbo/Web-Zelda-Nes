@@ -3,6 +3,8 @@ gApp.player = (function(){
   
   gApp.inv.inventory.slotA = gApp.inv.inventory.storage[0];
   gApp.item.weapons.sword.V1 = gApp.inv.inventory.storage[0];
+  gApp.inv.inventory.slotB = gApp.inv.inventory.storage[1];
+  gApp.item.weapons.bow.V1 = gApp.inv.inventory.storage[1];
 
   var playerState = function() {
     this.width = gApp.tileSize;
